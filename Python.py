@@ -44,7 +44,7 @@ def Main():
 
 
     for x in range(int(numberOfLori)-1):
-        Loris(addr, port, x)
+        Loris(addr, int(port), x)
         if(not Loris.running):
             print("Loris Could Not Connect Stopping Attack")
             break
