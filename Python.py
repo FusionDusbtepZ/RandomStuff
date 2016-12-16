@@ -55,6 +55,7 @@ def Main():
         command = input(">> ")
         if(command == ":q"):
             running = False
+            break
         print("Command Not Recognised")
 
 if __name__ == "__main__":
