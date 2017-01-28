@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Program Output Example http://pastebin.com/4k4tf8ff
+
+
 int blunder(int un, int startn) {
      if(((un * startn + (un/startn))  % startn) == 0) {
                return startn;
